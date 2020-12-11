@@ -1,0 +1,49 @@
+{extends file="layout.html"}
+{block name=title}::: LMS :{$layout.pagetitle|striphtml} :::{/block}
+{block name=module_content}
+
+{assign var="wrong_tariffs" value=count($anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'])}
+{assign var="anomalies" value=$wrong_tariffs}
+<h1>{trans('Anomaly detector')}</h1>
+{if $wrong_tariffs > 0}
+<p class="bold"><span style="background:whitesmoke;color:red;padding:5px;">{trans('anomaly detected')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
+<ul>
+    {foreach from=$anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'] item=item}
+    <li><a href="?m=nodeinfo&id={$item.nodeid}">NodeID: {$item.nodeid} ({$item.tariffname})</a></li>
+    {/foreach}
+</ul>
+{else}
+<p class="bold"><span style="background:whitesmoke;color:darkgreen;padding:5px;">{trans('OK')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
+{/if}
+
+<input type="button" value="{t}Support the author with a tip.{/t}" class="btn-donate" onclick="showOrHide('donate');">
+<div id="donate" class="bg-donate" style="display:none;">
+    <ul>
+        <li>{t}Bitcoin (BTC){/t}: bc1qvwahntcrwjtdp0ntfd0l6kdvdr9d9h6atp6qrr</li>
+        <li>{t}Ethereum (ETH){/t}: 0xEFCd4b066195652a885d916183ffFfeEEd931f40</li>
+    </ul>
+</div>
+
+<style>
+    .bg-donate {
+        color: black;
+        background: ghostwhite;
+        border: 1px solid gray;
+        padding: 1em;
+    }
+
+    input.btn-donate {
+        color: #333;
+        font-weight: bold;
+        background: #eee;
+        padding: 5px 10px 5px 10px;
+        border: 1px solid gray;
+        text-decoration: none;
+    }
+
+    input.btn-donate:hover {
+        background: #fff;
+        text-decoration: none;
+    }
+</style>
+{/block}

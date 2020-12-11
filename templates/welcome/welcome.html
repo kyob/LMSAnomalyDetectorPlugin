@@ -1,0 +1,31 @@
+{block name="extra-panel" append}
+    {assign var="wrong_tariffs" value=count($anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'])}
+
+{assign var="anomalies" value=$wrong_tariffs}
+
+<table class="lmsbox" id="lms-ui-welcome-box-anomalydetector">
+    <thead>
+        <tr onclick="showOrHide('welcome_anomalydetector');">
+            <td class="text-center bold">
+                <i class="fas fa-bomb"></i> {trans('Anomaly detector')}
+            </td>
+        </tr>
+    </thead>
+    <tbody id="welcome_anomalydetector" {if $anomalies<1 }style="display:none;" {/if}}>
+        <tr>
+            <td style="padding:1em;">
+                {if $wrong_tariffs > 0}
+                <p class="bold"><span style="background:whitesmoke;color:red;padding:5px;">{trans('anomaly detected')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
+                <ul>
+                    {foreach from=$anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'] item=item}
+                    <li><a href="?m=nodeinfo&id={$item.nodeid}">NodeID: {$item.nodeid} ({$item.tariffname})</a></li>
+                    {/foreach}
+                </ul>
+                {else}
+                <p class="bold"><span style="background:whitesmoke;color:darkgreen;padding:5px;">{trans('OK')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
+                {/if}
+            </td>
+        </tr>
+    </tbody>
+</table>
+{/block}

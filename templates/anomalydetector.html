@@ -2,79 +2,88 @@
 {block name=title}::: LMS :{$layout.pagetitle|striphtml} :::{/block}
 {block name=module_content}
 
-{assign var="non_stb_nodes_with_wrong_tariff_tax" value=count($anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'])}
-{assign var="voip_tariff_assigned_to_nodes" value=count($anomaly_detector['voip_tariff_assigned_to_nodes'])}
+    {if is_array($anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'])}
+        {assign var="non_stb_nodes_with_wrong_tariff_tax" value=count($anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'])}
+    {else}
+        {assign var="non_stb_nodes_with_wrong_tariff_tax" value=0}
+    {/if}
 
-{math equation="a + b" a=$non_stb_nodes_with_wrong_tariff_tax b=$voip_tariff_assigned_to_nodes assign=anomalies}
+    {if is_array($anomaly_detector['voip_tariff_assigned_to_nodes'])}
+        {assign var="voip_tariff_assigned_to_nodes" value=count($anomaly_detector['voip_tariff_assigned_to_nodes'])}
+    {else}
+        {assign var="voip_tariff_assigned_to_nodes" value=0}
+    {/if}
 
-<table class="lmsbox" id="lms-ui-welcome-box-anomalydetector">
-    <thead>
-        <tr onclick="showOrHide('welcome_anomalydetector');">
-            <td class="text-center bold">
-                <i class="fas fa-bomb"></i> {trans('Anomaly detector')}
-            </td>
-        </tr>
-    </thead>
-    <tbody id="welcome_anomalydetector" {if $anomalies<1 }style="display:none;" {/if}}>
-        <tr>
-            <td style="padding:1em;">
-                {if $non_stb_nodes_with_wrong_tariff_tax > 0}
-                <p class="bold"><span style="background:whitesmoke;color:red;padding:5px;">{trans('anomaly detected')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
-                <ul>
-                    {foreach from=$anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'] item=item}
-                    <li><a href="?m=nodeinfo&id={$item.nodeid}">NodeID: {$item.nodeid} ({$item.tariffname})</a></li>
-                    {/foreach}
-                </ul>
-                {else}
-                <p class="bold"><span style="background:whitesmoke;color:darkgreen;padding:5px;">{trans('OK')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
-                {/if}
-            </td>
-        </tr>
-        <tr>
-            <td style="padding:1em;">
-                {if $voip_tariff_assigned_to_nodes > 0}
-                <p class="bold"><span style="background:whitesmoke;color:red;padding:5px;">{trans('anomaly detected')}</span> {trans('VoIP tariffs assigned to routers or computers')}</p>
-                <ul>
-                    {foreach from=$anomaly_detector['voip_tariff_assigned_to_nodes'] item=item}
-                    <li><a href="?m=nodeinfo&id={$item.nodeid}">NodeID: {$item.nodeid} ({$item.tariffname})</a></li>
-                    {/foreach}
-                </ul>
-                {else}
-                <p class="bold"><span style="background:whitesmoke;color:darkgreen;padding:5px;">{trans('OK')}</span> {trans('VoIP tariffs assigned to routers or computers')}</p>
-                {/if}
-            </td>
-        </tr>
-    </tbody>
-</table>
+    {math equation="a + b" a=$non_stb_nodes_with_wrong_tariff_tax b=$voip_tariff_assigned_to_nodes assign=anomalies}
 
-<input type="button" value="{t}Support the author with a tip.{/t}" class="btn-donate" onclick="showOrHide('donate');">
-<div id="donate" class="bg-donate" style="display:none;">
-    <ul>
-        <li>{t}Bitcoin (BTC){/t}: bc1qvwahntcrwjtdp0ntfd0l6kdvdr9d9h6atp6qrr</li>
-        <li>{t}Ethereum (ETH){/t}: 0xEFCd4b066195652a885d916183ffFfeEEd931f40</li>
-    </ul>
-</div>
+    <table class="lmsbox" id="lms-ui-welcome-box-anomalydetector">
+        <thead>
+            <tr onclick="showOrHide('welcome_anomalydetector');">
+                <td class="text-center bold">
+                    <i class="fas fa-bomb"></i> {trans('Anomaly detector')}
+                </td>
+            </tr>
+        </thead>
+        <tbody id="welcome_anomalydetector" {if $anomalies<1 }style="display:none;" {/if}}>
+            <tr>
+                <td style="padding:1em;">
+                    {if $non_stb_nodes_with_wrong_tariff_tax > 0}
+                        <p class="bold"><span style="background:whitesmoke;color:red;padding:5px;">{trans('anomaly detected')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
+                        <ul>
+                            {foreach from=$anomaly_detector['non_stb_nodes_with_wrong_tariff_tax'] item=item}
+                                <li><a href="?m=nodeinfo&id={$item.nodeid}">NodeID: {$item.nodeid} ({$item.tariffname})</a></li>
+                            {/foreach}
+                        </ul>
+                    {else}
+                        <p class="bold"><span style="background:whitesmoke;color:darkgreen;padding:5px;">{trans('OK')}</span> {trans('TV tariffs assigned to routers or computers')}</p>
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:1em;">
+                    {if $voip_tariff_assigned_to_nodes > 0}
+                        <p class="bold"><span style="background:whitesmoke;color:red;padding:5px;">{trans('anomaly detected')}</span> {trans('VoIP tariffs assigned to routers or computers')}</p>
+                        <ul>
+                            {foreach from=$anomaly_detector['voip_tariff_assigned_to_nodes'] item=item}
+                                <li><a href="?m=nodeinfo&id={$item.nodeid}">NodeID: {$item.nodeid} ({$item.tariffname})</a></li>
+                            {/foreach}
+                        </ul>
+                    {else}
+                        <p class="bold"><span style="background:whitesmoke;color:darkgreen;padding:5px;">{trans('OK')}</span> {trans('VoIP tariffs assigned to routers or computers')}</p>
+                    {/if}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-<style>
-    .bg-donate {
-        color: black;
-        background: ghostwhite;
-        border: 1px solid gray;
-        padding: 1em;
-    }
+    <input type="button" value="{t}Support the author with a tip.{/t}" class="btn-donate" onclick="showOrHide('donate');">
+    <div id="donate" class="bg-donate" style="display:none;">
+        <ul>
+            <li>{t}Bitcoin (BTC){/t}: bc1qvwahntcrwjtdp0ntfd0l6kdvdr9d9h6atp6qrr</li>
+            <li>{t}Ethereum (ETH){/t}: 0xEFCd4b066195652a885d916183ffFfeEEd931f40</li>
+        </ul>
+    </div>
 
-    input.btn-donate {
-        color: #333;
-        font-weight: bold;
-        background: #eee;
-        padding: 5px 10px 5px 10px;
-        border: 1px solid gray;
-        text-decoration: none;
-    }
+    <style>
+        .bg-donate {
+            color: black;
+            background: ghostwhite;
+            border: 1px solid gray;
+            padding: 1em;
+        }
 
-    input.btn-donate:hover {
-        background: #fff;
-        text-decoration: none;
-    }
-</style>
+        input.btn-donate {
+            color: #333;
+            font-weight: bold;
+            background: #eee;
+            padding: 5px 10px 5px 10px;
+            border: 1px solid gray;
+            text-decoration: none;
+        }
+
+        input.btn-donate:hover {
+            background: #fff;
+            text-decoration: none;
+        }
+    </style>
 {/block}

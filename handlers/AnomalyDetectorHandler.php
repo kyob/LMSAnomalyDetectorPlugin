@@ -36,6 +36,7 @@ class AnomalyDetectorHandler
     {
         $SMARTY = LMSSmarty::getInstance();
         $DB = LMSDB::getInstance();
+
         $iptv_tax_rate = ConfigHelper::getConfig('anomaly-detector.iptv_tax_rate_id', 3);
         $type_voip = ConfigHelper::getConfig('anomaly-detector.voip_type_id', 4);
 
